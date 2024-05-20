@@ -22,7 +22,7 @@ class user{
             {
                 echo"<script>
                 alert('inserted successfully');
-                window.location.replace('history.php?email=$email');
+                window.location.replace('userpage.php?email=$email');
                 </script>";
 
             }
@@ -48,7 +48,9 @@ public function login($emails, $password)
     
         if ($result && mysqli_num_rows($result) > 0) {
             // If user found, redirect to history.php
-            $redirect = "history.php?email=$emails";
+        setcookie('isAuthenticated', 'true', time() + (86400 * 30), "/"); // 86400 = 1 day
+        $_COOKIE['isAuthenticated'] = 'true';
+            $redirect = "userpage.php?email=$emails";
             echo "<script>window.location.replace('$redirect');</script>";
         } else {
             // If user not found, display alert and redirect to homepage.php
@@ -59,10 +61,35 @@ public function login($emails, $password)
         // Close database connection
         mysqli_close($conn);
     }
-
+}
+public function saving($place,$userss)
+{
+    require("C:/xampp/htdocs/touriset/control/db-conn.php");
+    $sql ="SELECT * FROM `comment_rate` WHERE `place_name`='$place' AND`user_email`='$userss'";
+        $result = mysqli_query($conn, $sql);
     
-
+        if ($result && mysqli_num_rows($result) > 0)
+         {
+            echo "<script>alert('place stored. not to save it one more ');</script>";
+            return;
+         }
     
+    else
+     {
+        
+         
+        $s="INSERT INTO `comment_rate`(`id`, `user_email`, `place_name`) VALUES (NULL,'$userss','$place')";
+        $r = mysqli_query($conn, $s);
+        if($r)
+        {
+            echo"<script>
+            alert('inserted successfully');
+             
+            </script>";
+
+        }
+     }
 }
 }
+
 ?>
