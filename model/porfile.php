@@ -90,6 +90,42 @@ public function saving($place,$userss)
         }
      }
 }
-}
+public function rate($rate_place,$rate,$user_rate)
+{ require("C:/xampp/htdocs/touriset/control/db-conn.php");
+    try {
+        // Check if the place exists
+        $sql = "SELECT * FROM `places` WHERE `place`='$rate_place'";
+        $result = mysqli_query($conn, $sql);
+    
+        if (!$result || mysqli_num_rows($result) == 0) {
+            echo "<script>alert('Place not found');</script>";
+            return;
+        }
+    
+        // Check if the rating by this user for this place already exists
+        $check_rating_sql = "SELECT * FROM `rate` WHERE `rate_place`='$rate_place' AND `user`='$user_rate'";
+        $rating_result = mysqli_query($conn, $check_rating_sql);
+    
+        if ($rating_result && mysqli_num_rows($rating_result) > 0) {
+            echo "<script>alert('Rating for this place  already exists');</script>";
+            return;
+        }
+    
+        // Insert the new rating
+        $s = "INSERT INTO `rate`(`id`, `rate_place`, `rate`, `user`) VALUES (NULL, '$rate_place', '$rate', '$user_rate')";
+        $r = mysqli_query($conn, $s);
+    
+        if ($r) {
+            echo "<script>alert('Inserted successfully');</script>";
+        } else {
+            throw new mysqli_sql_exception("Insert operation failed: " . mysqli_error($conn));
+        }
+    } catch (mysqli_sql_exception $e) {
+        echo "<script>alert('Error: " . addslashes($e->getMessage()) . "');</script>";
+    }
+    
+    mysqli_close($conn);
 
+}
+}
 ?>
