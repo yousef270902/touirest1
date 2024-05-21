@@ -4,6 +4,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
     <link href="../view/css/admin.css" rel="stylesheet">
+    <link href="../view/css/rating.css" rel="stylesheet">
 <body>
     <section> 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -18,7 +19,10 @@
                 <a class="nav-link active" aria-current="page" href="homepage.php">Home</a>
               </li>
               <li class="nav-item">
-                <button class="nav-link active" aria-current="page"  onclick="history()">history</a>
+                <button class="nav-link active" aria-current="page"  onclick="history()">history</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link active" aria-current="page"  onclick="comment()">Add Rating and Comment </button>
               </li>
               <li class="nav-item">
                 <button class="nav-link" onclick="saved()">REQUEST</button>
@@ -112,18 +116,17 @@ if (isset($_GET['email'])) {
 </section>
 <section id="history" style="display:none;">
 
-<table class="table table-striped" style="width:55%;" id="placesTable">
+<table class="table table-striped" style="width:15%;" id="placesTable">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">place</th>
+                   <center> <th scope="col">place</th></center>
                 </tr>
             </thead>
             <tbody>
             <?php 
             if (isset($_GET['email'])) {
                 $email = $_GET['email'];
-                $s="SELECT `id`, `place_name` FROM `comment_rate` WHERE `user_email`='$email'";
+                $s="SELECT  `place_name` FROM `comment_rate` WHERE `user_email`='$email'";
                 $r = mysqli_query($conn, $s);
 
             }
@@ -131,8 +134,7 @@ if (isset($_GET['email'])) {
                     while ($row = mysqli_fetch_assoc($r)) { ?>
                        <form method="post">
                        <tr>
-                            <td><?php echo $row['id']; ?></td>
-                            <td><?php echo $row['place_name'];?></td>
+                            <center><td><?php echo $row['place_name'];?></td></center>
                         </tr>
                          
                     <?php } } else { ?>
@@ -150,6 +152,37 @@ if (isset($_GET['email'])) {
         </div>      
     </center>
 </section>
+<center>
+<section id="comments" style="display:none;">
+<?php
+if (isset($_GET['email'])) {
+    $email = $_GET['email'];
+ ?>
+<div class="container mt-5">
+    <form method="post">
+    <p>Welcome: <input type="text" style="background:none;border:none; color:white; width:60%;" name="user_rate" value="<?php echo $email;} ?>" readonly></p>
+      <div class="form-group mb-4">
+        <label for="rating" class="form-label">Rate our service:</label>
+        <br>
+        <div>
+            <label>Enter the place Name: </label>
+            <br>
+            <input type="text" name="rate_place" style="border-bottom: 1px white solid; color:white;" placeholder="Enter Place Name">
+        </div> 
+        <br>  
+        <div id="rating" class="rating">
+          <input type="radio" name="rating" id="star5" value="5"><label for="star5" title="5 stars"><i class="fa fa-star"></i></label>
+          <input type="radio" name="rating" id="star4" value="4"><label for="star4" title="4 stars"><i class="fa fa-star"></i></label>
+          <input type="radio" name="rating" id="star3" value="3"><label for="star3" title="3 stars"><i class="fa fa-star"></i></label>
+          <input type="radio" name="rating" id="star2" value="2"><label for="star2" title="2 stars"><i class="fa fa-star"></i></label>
+          <input type="radio" name="rating" id="star1" value="1"><label for="star1" title="1 star"><i class="fa fa-star"></i></label>
+        </div>
+      </div>
+      <input type="submit" class="btn btn-outline-primary" name="submit" value="rate">
+    </form>
+  </div>
+</section>
+</center>  
 <br>
 <br>
 <section id="contact">
@@ -205,11 +238,19 @@ function history()
 {
     document.getElementById('history').style.display = 'block';  
     document.getElementById('viewbycategory').style.display = 'none'; 
+    document.getElementById('comments').style.display = 'none';
 }
 function saved()
 {
     document.getElementById('history').style.display = 'none';  
     document.getElementById('viewbycategory').style.display = 'block'; 
+    document.getElementById('comments').style.display = 'none';
+}
+function comment()
+{
+    document.getElementById('history').style.display = 'none';  
+    document.getElementById('viewbycategory').style.display = 'none'; 
+    document.getElementById('comments').style.display = 'block';
 }
 </script>
 
