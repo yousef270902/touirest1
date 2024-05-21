@@ -53,6 +53,22 @@ if(isset($_POST["submit"]))
                             $user->login($email, $password);
                         }
                         break;
+                        case 'save':
+                            {
+                                //$id=["id"];
+                                $place=$_POST['place_name'];
+                                $userss=$_POST['user'];
+                                $user->saving($place,$userss);
+                            }
+                            break;
+                            case 'rate':
+                                {
+                                    $rate_place=$_POST['rate_place'];
+                                    $user_rate=$_POST['user_rate'];
+                                    if(isset($_POST['rating']))
+                                    $rate=$_POST['rating'];
+                                    $user->rate($rate_place,$rate,$user_rate);
+                                }
     }
 }
 ?>
